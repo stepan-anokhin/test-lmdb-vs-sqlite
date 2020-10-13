@@ -1,6 +1,8 @@
 import logging
 import sys
 
+import fire
+
 import perftest.lmdb
 import perftest.sqlite
 
@@ -19,10 +21,14 @@ def test_sqlite(count):
     perftest.sqlite.test_read(database, records.items())
 
 
+def test(count=1000):
+    """Carry out performance test."""
+    test_lmdb(count)
+    test_sqlite(count)
+
+
 if __name__ == '__main__':
     logging.getLogger("perftest").setLevel(logging.INFO)
     logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
-    trials = 10 ** 3
-    test_lmdb(trials)
-    test_sqlite(trials)
+    fire.Fire(test)
